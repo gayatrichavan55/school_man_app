@@ -1,7 +1,30 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '../../store/authSlice'
+
+
 
 export default function Headers() {
+
+    const status = useSelector(state => state.auth.status);
+    const logedIndata = useSelector(state => state.auth.data);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+
+    console.log(`Status : ${status} || data : ${logedIndata}`);
+
+
+    const handleLogOut = () => {
+
+        dispatch(logout())
+        navigate("/")
+
+    }
+
+
+
     return (
         <div>
             <nav className="bg-gray-800 py-4">
@@ -21,10 +44,27 @@ export default function Headers() {
                     </div>
 
                     {/* <!-- Right-aligned Sign In/Sign Up --> */}
-                    <div className="flex items-center">
-                        <Link to="login" className="text-white hover:text-gray-300 bg-blue-600 rounded-xl p-3">Sign In</Link>
-                        <Link to="signup" className="text-white hover:text-gray-300 ml-4 bg-orange-400 rounded-xl p-3">Sign Up</Link>
-                    </div>
+
+                    {!status ? (
+
+
+                        <div className="flex items-center space-x-8">
+                            <Link to="login" className="text-white hover:text-gray-300 bg-blue-600 rounded-xl p-3">Sign In</Link>
+                            <Link to="signup" className="text-white hover:text-gray-300 ml-4 bg-orange-400 rounded-xl p-3">Sign Up</Link>
+                        </div>
+
+                    ) : (
+
+
+                        <div className="flex items-center space-x-8">
+                            <Link to="#" className="text-orange-400 font-bold">Welcome : {logedIndata.fullName}</Link>
+                            <Link to="#" className="text-black hover:text-gray-300 ml-4 bg-red-400 rounded-xl p-3"
+                                onClick={handleLogOut}
+                            >LogOut</Link>
+                        </div>
+
+                    )}
+
 
                     {/* <!-- Mobile menu button --> */}
                     <div className="sm:hidden">

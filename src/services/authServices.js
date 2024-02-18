@@ -20,11 +20,22 @@ export const signupUser = async (userdata) => {
 }
 
 
-export const login = async (email) => {
+export const loginUser = async (email) => {
 
-    console.log(`login for email : ${email}`);
+    // console.log(`login for email : ${email}`);
 
     const responseData = await fetch(`${BASE_URL}/login/${email}`)
     .then(respoData => respoData.json())
+    .then(data =>{ 
+        // console.log(data)
+        if (!data) {
+            console.log('data not dispatched');
+        }
+        return data
+    })
     .catch(e => console.log(e));
+
+    console.log(responseData);
+
+    return responseData
 }

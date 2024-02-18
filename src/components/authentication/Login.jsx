@@ -1,15 +1,32 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import {login} from '../../services/authServices'
+import { loginUser} from '../../services/authServices'
+import {login} from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+
 
 
 export default function Login() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const onSubmit = (data) => {
-      console.log(data.email);
-      login(data.email);
+      // console.log(data.email);
+      const userData = loginUser(data.email);
+      // console.log(userData);
+      console.log(`login ${userData.then(d => console.log(d))}`);
+      userData.then(data => {
+        dispatch(login(data));
+      })
+      
+      // dispatch(login(data));
+      navigate("/dashLayout")
+
     };
   
 
